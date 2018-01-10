@@ -12,11 +12,9 @@
 
 namespace presentkim\singleton {
 
-    use function implode;
     use pocketmine\{
       event\Listener, event\player\PlayerCommandPreprocessEvent, event\server\RemoteServerCommandEvent, event\server\ServerCommandEvent, plugin\PluginBase
     };
-    use function strcasecmp;
 
     class IgnoreCommandCase extends PluginBase implements Listener{
 
