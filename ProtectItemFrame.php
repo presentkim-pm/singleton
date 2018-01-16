@@ -65,21 +65,25 @@ namespace presentkim\singleton {
 
                     $player = $event->getPlayer();
 
-                    if ($player->getInventory()->getItemInHand()->getId() === Item::STICK) {
-                        if ($player->hasPermission('itemframe.protect.make')) {
-                            $tile->namedtag->setTagValue('itemframe-protect', ByteTag::class, $mode = ++$mode % 3, true);
-                            if ($mode === self::PROTECTED_DROP) {
-                                $player->sendMessage(TextFormat::GREEN . '[ProtectItemFrame] protected drop');
-                            } elseif ($mode === self::PROTECTED_ROTATE) {
-                                $player->sendMessage(TextFormat::GREEN . '[ProtectItemFrame] protected drop & rotate');
+                    if ($event->getAction() === PlayerInteractEvent::LEFT_CLICK_BLOCK) {
+                        if ($player->getInventory()->getItemInHand()->getId() === Item::STICK) {
+                            if ($player->hasPermission('itemframe.protect.make')) {
+                                $tile->namedtag->setTagValue('itemframe-protect', ByteTag::class, $mode = ++$mode % 3, true);
+                                if ($mode === self::PROTECTED_DROP) {
+                                    $player->sendMessage(TextFormat::GREEN . '[ProtectItemFrame] protected drop');
+                                } elseif ($mode === self::PROTECTED_ROTATE) {
+                                    $player->sendMessage(TextFormat::GREEN . '[ProtectItemFrame] protected drop & rotate');
+                                } else {
+                                    $player->sendMessage(TextFormat::DARK_GREEN . '[ProtectItemFrame] unprotected');
+                                }
                             } else {
-                                $player->sendMessage(TextFormat::DARK_GREEN . '[ProtectItemFrame] unprotected');
+                                $player->sendMessage(TextFormat::RED . '[ProtectItemFrame] You don\'t have permission');
                             }
-                        } else {
-                            $player->sendMessage(TextFormat::RED . '[ProtectItemFrame] You don\'t have permission');
+                            $event->setCancelled(true);
+                        } elseif ($mode === self::PROTECTED_DROP && !$player->hasPermission('itemframe.protect.drop')) {
+                            $event->setCancelled(true);
                         }
-                        $event->setCancelled(true);
-                    } elseif ($mode === self::PROTECTED_DROP && !$player->hasPermission('itemframe.protect.drop') && $event->getAction() === PlayerInteractEvent::LEFT_CLICK_BLOCK || $mode === self::PROTECTED_ROTATE && !$player->hasPermission('itemframe.protect.rotate')) {
+                    } elseif ($mode === self::PROTECTED_ROTATE && !$player->hasPermission('itemframe.protect.rotate')) {
                         $event->setCancelled(true);
                     }
                 }
