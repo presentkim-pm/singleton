@@ -70,14 +70,14 @@ namespace presentkim\singleton {
                             if ($player->hasPermission('itemframe.protect.make')) {
                                 $tile->namedtag->setTagValue('itemframe-protect', ByteTag::class, $mode = ++$mode % 3, true);
                                 if ($mode === self::PROTECTED_DROP) {
-                                    $player->sendMessage(TextFormat::GREEN . '[ProtectItemFrame] protected drop');
+                                    $player->sendMessage(TextFormat::GREEN . '[Protect] protected drop');
                                 } elseif ($mode === self::PROTECTED_ROTATE) {
-                                    $player->sendMessage(TextFormat::GREEN . '[ProtectItemFrame] protected drop & rotate');
+                                    $player->sendMessage(TextFormat::GREEN . '[Protect] protected drop & rotate');
                                 } else {
-                                    $player->sendMessage(TextFormat::DARK_GREEN . '[ProtectItemFrame] unprotected');
+                                    $player->sendMessage(TextFormat::DARK_GREEN . '[Protect] unprotected');
                                 }
                             } else {
-                                $player->sendMessage(TextFormat::RED . '[ProtectItemFrame] You don\'t have permission');
+                                $player->sendMessage(TextFormat::RED . '[Protect] You don\'t have permission');
                             }
                             $event->setCancelled(true);
                         } elseif ($mode === self::PROTECTED_DROP && !$player->hasPermission('itemframe.protect.drop')) {
