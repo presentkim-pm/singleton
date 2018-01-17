@@ -12,12 +12,11 @@
  *
  * @name        ProtectItemFrame
  * @main        presentkim\singleton\ProtectItemFrame
- * @version     1.0.1
+ * @version     1.0.3
  * @api         3.0.0-ALPHA10
  * @description Protect item frame by stick
  * @author      PresentKim
  */
-
 
 namespace presentkim\singleton {
 
@@ -80,7 +79,7 @@ namespace presentkim\singleton {
                                 $player->sendMessage(TextFormat::RED . '[Protect] You don\'t have permission');
                             }
                             $event->setCancelled(true);
-                        } elseif ($mode === self::PROTECTED_DROP && !$player->hasPermission('itemframe.protect.drop')) {
+                        } elseif (($mode === self::PROTECTED_DROP || $mode === self::PROTECTED_ROTATE) && !$player->hasPermission('itemframe.protect.drop')) {
                             $event->setCancelled(true);
                         }
                     } elseif ($mode === self::PROTECTED_ROTATE && !$player->hasPermission('itemframe.protect.rotate')) {
