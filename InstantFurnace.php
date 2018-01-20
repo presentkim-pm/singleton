@@ -59,6 +59,9 @@ namespace presentkim\singleton {
                 if (($burnTime = $furnace->namedtag->getShort(Furnace::TAG_BURN_TIME)) > 200) {
                     $furnace->namedtag->setShort(Furnace::TAG_BURN_TIME, $burnTime - 200);
                     $furnace->namedtag->setShort(Furnace::TAG_COOK_TIME, 400);
+                } elseif ($furnace->getInventory()->getFuel()->getFuelTime() > 200) {
+                    $furnace->namedtag->setShort(Furnace::TAG_BURN_TIME, 0);
+                    $furnace->namedtag->setShort(Furnace::TAG_COOK_TIME, $furnace->namedtag->getShort(Furnace::TAG_COOK_TIME) + $burnTime);
                 }
             }
         }
