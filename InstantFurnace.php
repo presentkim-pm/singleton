@@ -42,8 +42,8 @@ namespace presentkim\singleton {
             if (!$event->isCancelled()) {
                 if (($burnTime = $event->getBurnTime()) > 200) {
                     $furnace = $event->getFurnace();
-                    $event->setBurnTime($burnTime - 200);
-                    $furnace->namedtag->setShort(Furnace::TAG_COOK_TIME, 400);
+                    $event->setBurnTime($burnTime - 199);
+                    $furnace->namedtag->setShort(Furnace::TAG_COOK_TIME, 399);
                 }
             }
         }
@@ -56,11 +56,11 @@ namespace presentkim\singleton {
         public function onFurnaceSmeltEvent(FurnaceSmeltEvent $event){
             if (!$event->isCancelled()) {
                 $furnace = $event->getFurnace();
-                if (($burnTime = $furnace->namedtag->getShort(Furnace::TAG_BURN_TIME)) > 200) {
-                    $furnace->namedtag->setShort(Furnace::TAG_BURN_TIME, $burnTime - 200);
-                    $furnace->namedtag->setShort(Furnace::TAG_COOK_TIME, 400);
+                if (($burnTime = $furnace->namedtag->getShort(Furnace::TAG_BURN_TIME)) > 199) {
+                    $furnace->namedtag->setShort(Furnace::TAG_BURN_TIME, $burnTime - 199);
+                    $furnace->namedtag->setShort(Furnace::TAG_COOK_TIME, 399);
                 } elseif ($furnace->getInventory()->getFuel()->getFuelTime() > 200) {
-                    $furnace->namedtag->setShort(Furnace::TAG_BURN_TIME, 0);
+                    $furnace->namedtag->setShort(Furnace::TAG_BURN_TIME, 1);
                     $furnace->namedtag->setShort(Furnace::TAG_COOK_TIME, $furnace->namedtag->getShort(Furnace::TAG_COOK_TIME) + $burnTime);
                 }
             }
