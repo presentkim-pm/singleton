@@ -16,7 +16,7 @@
  *
  * @name MakeOptimizedPlugin
  * @main        presentkim\singleton\MakeOptimizedPlugin
- * @version     1.0.0
+ * @version     1.0.1
  * @api         3.0.0-ALPHA10
  * @description Make optimized plugin with devtools
  * @author      PresentKim
@@ -84,7 +84,7 @@ namespace presentkim\singleton {
                         $sender->sendMessage(TextFormat::RED . count($failed) . " plugin" . (count($failed) === 1 ? "" : "s") . " failed to build: " . implode(", ", $failed));
                     }
                     if (count($succeeded) > 0) {
-                        $sender->sendMessage(TextFormat::GREEN . count($succeeded) . "/" . (count($plugins) - $skipped) . " plugin" . ((count($plugins) - $skipped) === 1 ? "" : "s") . " successfully built: " . implode(", ", $succeeded));
+                        $sender->sendMessage(TextFormat::GREEN . count($succeeded) . '/' . (count($plugins) - $skipped) . " plugin" . ((count($plugins) - $skipped) === 1 ? "" : "s") . " successfully built: " . implode(", ", $succeeded));
                     }
                 } else {
                     $this->makePluginCommand($sender, $command, $label, $args);
@@ -95,43 +95,43 @@ namespace presentkim\singleton {
         }
 
         private function makePluginCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
-            $pluginName = trim(implode(" ", $args));
+            $pluginName = trim(implode(' ', $args));
             if ($pluginName === "" or !(($plugin = Server::getInstance()->getPluginManager()->getPlugin($pluginName)) instanceof Plugin)) {
-                $sender->sendMessage(TextFormat::RED . "Invalid plugin name, check the name case.");
+                $sender->sendMessage(TextFormat::RED . 'Invalid plugin name, check the name case.');
                 return false;
             }
             $description = $plugin->getDescription();
 
             if (!($plugin->getPluginLoader() instanceof FolderPluginLoader)) {
-                $sender->sendMessage(TextFormat::RED . "Plugin " . $description->getName() . " is not in folder structure.");
+                $sender->sendMessage(TextFormat::RED . "Plugin {$description->getName()} is not in folder structure.");
                 return false;
             }
 
-            $pharPath = $this->getDataFolder() . DIRECTORY_SEPARATOR . $description->getName() . "_v" . $description->getVersion() . ".phar";
+            $pharPath = "{$this->getDataFolder()}{$description->getName()}_v{$description->getVersion()}.phar";
 
             $metadata = [
-              "name"         => $description->getName(),
-              "version"      => $description->getVersion(),
-              "main"         => $description->getMain(),
-              "api"          => $description->getCompatibleApis(),
-              "depend"       => $description->getDepend(),
-              "description"  => $description->getDescription(),
-              "authors"      => $description->getAuthors(),
-              "website"      => $description->getWebsite(),
-              "creationDate" => time(),
+              'name'         => $description->getName(),
+              'version'      => $description->getVersion(),
+              'main'         => $description->getMain(),
+              'api'          => $description->getCompatibleApis(),
+              'depend'       => $description->getDepend(),
+              'description'  => $description->getDescription(),
+              'authors'      => $description->getAuthors(),
+              'website'      => $description->getWebsite(),
+              'creationDate' => time(),
             ];
 
-            if ($description->getName() === "DevTools") {
+            if ($description->getName() === 'DevTools') {
                 $stub = '<?php require("phar://". __FILE__ ."/src/DevTools/ConsoleScript.php"); __HALT_COMPILER();';
             } else {
                 $stub = '<?php echo "PocketMine-MP plugin ' . $description->getName() . ' v' . $description->getVersion() . '\nThis file has been generated using DevTools v' . $this->getDescription()->getVersion() . ' at ' . date("r") . '\n----------------\n";if(extension_loaded("phar")){$phar = new \Phar(__FILE__);foreach($phar->getMetadata() as $key => $value){echo ucfirst($key).": ".(is_array($value) ? implode(", ", $value):$value)."\n";}} __HALT_COMPILER();';
             }
 
             $reflection = new \ReflectionClass("pocketmine\\plugin\\PluginBase");
-            $file = $reflection->getProperty("file");
+            $file = $reflection->getProperty('file');
             $file->setAccessible(true);
-            $filePath = rtrim(str_replace("\\", "/", $file->getValue($plugin)), "/") . "/";
-            $newPath = $this->getDataFolder() . 'build' . "\\";
+            $filePath = rtrim(str_replace("\\", '/', $file->getValue($plugin)), '/') . '/';
+            $newPath = $this->getDataFolder() . 'build/';
             if (!file_exists($newPath)) {
                 mkdir($newPath, 0777, true);
             }
@@ -154,12 +154,12 @@ namespace presentkim\singleton {
                 }
                 \file_put_contents($newFilePath, $contents);
             }
-            $this->buildPhar($sender, $pharPath, rtrim(str_replace("\\", "/", $newPath), "/") . "/", [], $metadata, $stub, \Phar::SHA1);
+            $this->buildPhar($sender, $pharPath, rtrim(str_replace("\\", '/', $newPath), '/') . '/', [], $metadata, $stub, \Phar::SHA1);
 
             if (file_exists($newPath)) {
                 delTree($newPath);
             }
-            $sender->sendMessage("Phar plugin " . $description->getName() . " v" . $description->getVersion() . " has been created on " . $pharPath);
+            $sender->sendMessage("Phar plugin {$description->getName()} v{$description->getVersion()} has been created on {$pharPath}");
             return true;
         }
 
@@ -170,11 +170,11 @@ namespace presentkim\singleton {
             }
 
             if (file_exists($pharPath)) {
-                $sender->sendMessage("Phar file already exists, overwriting...");
+                $sender->sendMessage('Phar file already exists, overwriting...');
                 \Phar::unlinkArchive($pharPath);
             }
 
-            $sender->sendMessage("[DevTools] Adding files...");
+            $sender->sendMessage('[DevTools] Adding files...');
 
             $start = microtime(true);
 
@@ -186,7 +186,7 @@ namespace presentkim\singleton {
 
             //If paths contain any of these, they will be excluded
             $excludedSubstrings = [
-              "/.",
+              '/.',
               //"Hidden" files, git information etc
               realpath($pharPath)
               //don't add the phar to itself
@@ -198,19 +198,19 @@ namespace presentkim\singleton {
             );
 
             $count = count($phar->buildFromDirectory($basePath, $regex));
-            $sender->sendMessage("[DevTools] Added $count files");
+            $sender->sendMessage("[DevTools] Added {$count} files");
 
-            $sender->sendMessage("[DevTools] Checking for compressible files...");
+            $sender->sendMessage('[DevTools] Checking for compressible files...');
             foreach ($phar as $file => $finfo) {
                 /** @var \PharFileInfo $finfo */
                 if ($finfo->getSize() > (1024 * 512)) {
-                    $sender->sendMessage("[DevTools] Compressing " . $finfo->getFilename());
+                    $sender->sendMessage("[DevTools] Compressing {$finfo->getFilename()}");
                     $finfo->compress(\Phar::GZ);
                 }
             }
             $phar->stopBuffering();
 
-            $sender->sendMessage("[DevTools] Done in " . round(microtime(true) - $start, 3) . "s");
+            $sender->sendMessage('[DevTools] Done in ' . round(microtime(true) - $start, 3) . 's');
         }
 
     }
@@ -331,7 +331,7 @@ namespace presentkim\singleton {
 
                         $token[1] = 'S;';
                         for ($j = $index + 1, $count = \sizeof($tree); $j < $count; $j++) {
-                            if (\is_string($tree[$j]) && $tree[$j] == ";") {
+                            if (\is_string($tree[$j]) && $tree[$j] == ';') {
                                 $i = $j;
                                 break;
                             } elseif ($tree[$j][0] == \T_CLOSE_TAG) {
@@ -340,10 +340,10 @@ namespace presentkim\singleton {
                         }
                         break;
                     case \T_LOGICAL_OR:
-                        $token[1] = "||";
+                        $token[1] = '||';
                         break;
                     case \T_LOGICAL_AND:
-                        $token[1] = "&&";
+                        $token[1] = '&&';
                         break;
                     default:
                         if (!$inHeredoc) {
@@ -391,7 +391,7 @@ namespace presentkim\singleton {
     }
 
     function recreateTree($tree){
-        $output = "";
+        $output = '';
         foreach ($tree as $token) {
             if (\is_array($token)) {
                 $output .= $token[1];
