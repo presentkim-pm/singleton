@@ -288,12 +288,12 @@ namespace presentkim\singleton {
                     case \T_VARIABLE:
                         if ($token[1] != '$this' && !in_arrayi(getBefore($tree, $index), $ignoreVartiableBefores)) {
                             if (!isset($variables[$token[1]])) {
-                                $variableName = '$' . $firstChars[\sizeof($variables) % \sizeof($firstChars)];
-                                if (($sub = \floor((\sizeof($variables)) / \sizeof($firstChars)) - 1) > -1) {
+                                $variableName = '$' . $firstChars[\count($variables) % \count($firstChars)];
+                                if (($sub = \floor((\count($variables)) / \count($firstChars)) - 1) > -1) {
                                     $variableName .= $firstChars[$sub];
                                 }
                                 if (isset($variables[$variableName])) {
-                                    $variableName .= \dechex(\sizeof($variables) + 10);
+                                    $variableName .= \dechex(\count($variables) + 10);
                                 }
                                 $variables[$token[1]] = $variableName;
                             }
@@ -330,7 +330,7 @@ namespace presentkim\singleton {
                         $inHeredoc = \false;
 
                         $token[1] = 'S;';
-                        for ($j = $index + 1, $count = \sizeof($tree); $j < $count; $j++) {
+                        for ($j = $index + 1, $count = \count($tree); $j < $count; $j++) {
                             if (\is_string($tree[$j]) && $tree[$j] == ';') {
                                 $i = $j;
                                 break;
