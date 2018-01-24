@@ -24,7 +24,7 @@ namespace presentkim\singleton {
       Listener, block\BlockBreakEvent
     };
     use pocketmine\{
-      plugin\PluginBase
+      inventory\InventoryHolder, plugin\PluginBase
     };
 
     class InstantPickup extends PluginBase implements Listener{
@@ -52,6 +52,20 @@ namespace presentkim\singleton {
                         }
                     }
                     $event->setDrops($drops);
+
+                    $tile = $player->level->getTile($event->getBlock());
+                    if ($tile instanceof InventoryHolder) {
+                        $tileInventory = $tile->getInventory();
+                        $items = [];
+                        foreach ($tileInventory->getContents() as $i => $item) {
+                            if ($inventory->canAddItem($item)) {
+                                $inventory->addItem($item);
+                            } else {
+                                $items[] = $item;
+                            }
+                        }
+                        $tileInventory->setContents($items);
+                    }
                 }
             }
         }
