@@ -45,10 +45,8 @@ namespace presentkim\singleton {
                     $inventory = $player->getInventory();
                     $drops = [];
                     foreach ($event->getDrops() as $i => $drop) {
-                        if ($inventory->canAddItem($drop)) {
-                            $inventory->addItem($drop);
-                        } else {
-                            $drops[] = $drop;
+                        foreach ($inventory->addItem($drop) as $i) {
+                            $drops[] = $i;
                         }
                     }
                     $event->setDrops($drops);
@@ -58,10 +56,8 @@ namespace presentkim\singleton {
                         $tileInventory = $tile->getInventory();
                         $items = [];
                         foreach ($tileInventory->getContents() as $i => $item) {
-                            if ($inventory->canAddItem($item)) {
-                                $inventory->addItem($item);
-                            } else {
-                                $items[] = $item;
+                            foreach ($inventory->addItem($item) as $i) {
+                                $items[] = $i;
                             }
                         }
                         $tileInventory->setContents($items);
