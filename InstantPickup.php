@@ -13,7 +13,7 @@
  * @name        InstantPickup
  * @main        presentkim\singleton\InstantPickup
  * @version     1.0.0
- * @api         3.0.0-ALPHA10
+ * @api         3.0.0-ALPHA11
  * @description Instant pickup
  * @author      PresentKim
  */

@@ -13,7 +13,7 @@
  * @name        HandSoundproof
  * @main        presentkim\singleton\HandSoundproof
  * @version     1.0.0
- * @api         3.0.0-ALPHA10
+ * @api         3.0.0-ALPHA11
  * @description Mute the hand sounds
  * @author      PresentKim
  */

@@ -13,7 +13,7 @@
  * @name        InstantFurnace
  * @main        presentkim\singleton\InstantFurnace
  * @version     1.0.0
- * @api         3.0.0-ALPHA10
+ * @api         3.0.0-ALPHA11
  * @description Instant furnace
  * @author      PresentKim
  */

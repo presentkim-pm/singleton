@@ -13,7 +13,7 @@
  * @name        ProtectItemFrame
  * @main        presentkim\singleton\ProtectItemFrame
  * @version     1.0.3
- * @api         3.0.0-ALPHA10
+ * @api         3.0.0-ALPHA11
  * @description Protect item frame by stick
  * @author      PresentKim
  */

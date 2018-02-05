@@ -17,7 +17,7 @@
  * @name MakeOptimizedPlugin
  * @main        presentkim\singleton\MakeOptimizedPlugin
  * @version     1.0.1
- * @api         3.0.0-ALPHA10
+ * @api         3.0.0-ALPHA11
  * @description Make optimized plugin with devtools
  * @author      PresentKim
  */
