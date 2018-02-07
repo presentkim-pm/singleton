@@ -47,7 +47,7 @@ namespace presentkim\singleton {
             $command->setExecutor($this);
             $command->setPermission('devtools.command.makeplugin');
             $command->setDescription('Creates a Optimized Phar plugin from one in source code form');
-            $command->setUsage('/makeoptimizedplugin <pluginName>');
+            $command->setUsage('/makeoptimizedplugin <pluginName> [minify=true]');
             $command->setAliases([
               'mop',
               'makeop',
@@ -65,6 +65,8 @@ namespace presentkim\singleton {
          */
         public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
             if (isset($args[0])) {
+                $minify = isset($args[1]) ? (bool) $args[1] : false;
+                unset($args[1]);
                 if ($args[0] === "*") {
                     $plugins = $this->getServer()->getPluginManager()->getPlugins();
                     $succeeded = $failed = [];
@@ -74,7 +76,7 @@ namespace presentkim\singleton {
                             $skipped++;
                             continue;
                         }
-                        if ($this->makePluginCommand($sender, $command, $label, [$plugin->getName()])) {
+                        if ($this->makePluginCommand($sender, $command, $label, $minify, [$plugin->getName()])) {
                             $succeeded[] = $plugin->getName();
                         } else {
                             $failed[] = $plugin->getName();
@@ -87,14 +89,14 @@ namespace presentkim\singleton {
                         $sender->sendMessage(TextFormat::GREEN . count($succeeded) . '/' . (count($plugins) - $skipped) . " plugin" . ((count($plugins) - $skipped) === 1 ? "" : "s") . " successfully built: " . implode(", ", $succeeded));
                     }
                 } else {
-                    $this->makePluginCommand($sender, $command, $label, $args);
+                    $this->makePluginCommand($sender, $command, $label, $minify, $args);
                 }
                 return true;
             }
             return false;
         }
 
-        private function makePluginCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
+        private function makePluginCommand(CommandSender $sender, Command $command, string $label, bool $minify, array $args) : bool{
             $pluginName = trim(implode(' ', $args));
             if ($pluginName === "" or !(($plugin = Server::getInstance()->getPluginManager()->getPlugin($pluginName)) instanceof Plugin)) {
                 $sender->sendMessage(TextFormat::RED . 'Invalid plugin name, check the name case.');
@@ -109,20 +111,26 @@ namespace presentkim\singleton {
 
             $pharPath = "{$this->getDataFolder()}{$description->getName()}_v{$description->getVersion()}.phar";
 
-            $metadata = [
-              'name'         => $description->getName(),
-              'version'      => $description->getVersion(),
-              'main'         => $description->getMain(),
-              'api'          => $description->getCompatibleApis(),
-              'depend'       => $description->getDepend(),
-              'description'  => $description->getDescription(),
-              'authors'      => $description->getAuthors(),
-              'website'      => $description->getWebsite(),
-              'creationDate' => time(),
-            ];
+            if ($minify) {
+                $metadata = [];
+            } else {
+                $metadata = [
+                  'name'         => $description->getName(),
+                  'version'      => $description->getVersion(),
+                  'main'         => $description->getMain(),
+                  'api'          => $description->getCompatibleApis(),
+                  'depend'       => $description->getDepend(),
+                  'description'  => $description->getDescription(),
+                  'authors'      => $description->getAuthors(),
+                  'website'      => $description->getWebsite(),
+                  'creationDate' => time(),
+                ];
+            }
 
             if ($description->getName() === 'DevTools') {
                 $stub = '<?php require("phar://". __FILE__ ."/src/DevTools/ConsoleScript.php"); __HALT_COMPILER();';
+            } elseif ($minify) {
+                $stub = '<?php __HALT_COMPILER();';
             } else {
                 $stub = '<?php echo "PocketMine-MP plugin ' . $description->getName() . ' v' . $description->getVersion() . '\nThis file has been generated using DevTools v' . $this->getDescription()->getVersion() . ' at ' . date("r") . '\n----------------\n";if(extension_loaded("phar")){$phar = new \Phar(__FILE__);foreach($phar->getMetadata() as $key => $value){echo ucfirst($key).": ".(is_array($value) ? implode(", ", $value):$value)."\n";}} __HALT_COMPILER();';
             }
@@ -141,25 +149,27 @@ namespace presentkim\singleton {
                 if (strpos($inPath, '.') === 0 || strpos($fileName, '.') === 0 || $fileName === "." || $fileName === "..") {
                     continue;
                 }
-                $contents = \file_get_contents($path);
-                if (\substr($path, -4) == '.php') {
-                    $tree = \token_get_all($contents);
-                    optimize($tree);
-                    $contents = recreateTree($tree);
+                if (!$minify || $inPath === 'plugin.yml' || strpos($inPath, 'src\\') === 0 || strpos($inPath, 'resources\\') === 0) {
+                    $contents = \file_get_contents($path);
+                    if (\substr($path, -4) == '.php') {
+                        $tree = \token_get_all($contents);
+                        optimize($tree);
+                        $contents = recreateTree($tree);
+                    }
+                    $newFilePath = "$newPath$inPath";
+                    $newFileDir = dirname($newFilePath);
+                    if (!file_exists($newFileDir)) {
+                        mkdir($newFileDir, 0777, true);
+                    }
+                    \file_put_contents($newFilePath, $contents);
                 }
-                $newFilePath = "$newPath$inPath";
-                $newFileDir = dirname($newFilePath);
-                if (!file_exists($newFileDir)) {
-                    mkdir($newFileDir, 0777, true);
-                }
-                \file_put_contents($newFilePath, $contents);
             }
             $this->buildPhar($sender, $pharPath, rtrim(str_replace("\\", '/', $newPath), '/') . '/', [], $metadata, $stub, \Phar::SHA1);
 
             if (file_exists($newPath)) {
                 delTree($newPath);
             }
-            $sender->sendMessage("Phar plugin {$description->getName()} v{$description->getVersion()} has been created on {$pharPath}");
+            $sender->sendMessage("Phar plugin {$description->getName()} v{$description->getVersion()} has been created on {$pharPath}" . ($minify ? ' (minify)' : ''));
             return true;
         }
 
