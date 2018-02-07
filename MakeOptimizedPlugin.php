@@ -153,7 +153,7 @@ namespace presentkim\singleton {
                     $contents = \file_get_contents($path);
                     if (\substr($path, -4) == '.php') {
                         $tree = \token_get_all($contents);
-                        optimize($tree);
+                        optimize($tree, $minify);
                         $contents = recreateTree($tree);
                     }
                     $newFilePath = "$newPath$inPath";
@@ -242,7 +242,7 @@ namespace presentkim\singleton {
         return rmdir($dir);
     }
 
-    function optimize(array &$tree) : void{
+    function optimize(array &$tree, bool $minify) : void{
         $firstChars = \array_merge(\range('a', 'z'), \range('A', 'Z'));
         $otherChars = \array_merge(\range('0', '9'), $firstChars);
         \array_unshift($firstChars, '_');
@@ -273,27 +273,33 @@ namespace presentkim\singleton {
                         }
                         break;
                     case \T_COMMENT:
-                        $token[1] = '';
+                        if ($minify) {
+                            $token[1] = '';
+                        }
                         break;
                     case \T_DOC_COMMENT:
-                        $annotations = [];
-                        if (preg_match("/^[\t ]*\* @priority[\t ]{1,}([a-zA-Z]{1,})/m", $token[1], $matches) > 0) {
-                            $annotations[] = "@priority $matches[1]";
-                        }
-                        if (preg_match("/^[\t ]*\* @ignoreCancelled[\t ]{1,}([a-zA-Z]{1,})/m", $token[1], $matches) > 0) {
-                            $annotations[] = "@ignoreCancelled $matches[1]";
-                        }
-                        $token[1] = '';
-                        if (!empty($annotations)) {
-                            $token[1] .= '/** ' . PHP_EOL;
-                            foreach ($annotations as $value) {
-                                $token[1] .= "* $value" . PHP_EOL;
+                        if ($minify) {
+                            $annotations = [];
+                            if (preg_match("/^[\t ]*\* @priority[\t ]{1,}([a-zA-Z]{1,})/m", $token[1], $matches) > 0) {
+                                $annotations[] = "@priority $matches[1]";
                             }
-                            $token[1] .= '*/' . PHP_EOL;
+                            if (preg_match("/^[\t ]*\* @ignoreCancelled[\t ]{1,}([a-zA-Z]{1,})/m", $token[1], $matches) > 0) {
+                                $annotations[] = "@ignoreCancelled $matches[1]";
+                            }
+                            $token[1] = '';
+                            if (!empty($annotations)) {
+                                $token[1] .= '/** ' . PHP_EOL;
+                                foreach ($annotations as $value) {
+                                    $token[1] .= "* $value" . PHP_EOL;
+                                }
+                                $token[1] .= '*/' . PHP_EOL;
+                            }
                         }
                         break;
                     case \T_WHITESPACE:
-                        $token[1] = ' ';
+                        if ($minify) {
+                            $token[1] = ' ';
+                        }
                         break;
                     case \T_VARIABLE:
                         if ($token[1] != '$this' && !in_arrayi(getBefore($tree, $index), $ignoreVartiableBefores)) {
