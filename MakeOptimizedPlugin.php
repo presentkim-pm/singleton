@@ -360,7 +360,7 @@ namespace presentkim\singleton {
         }
     }
 
-    function getAfter(array $tree, $current) : ?mixed{
+    function getAfter(array $tree, $current){
         do {
             $token = $tree[++$current];
             if (\is_array($token)) {
@@ -375,7 +375,7 @@ namespace presentkim\singleton {
         return \null;
     }
 
-    function getBefore(array $tree, $current) : ?mixed{
+    function getBefore(array $tree, $current){
         do {
             $token = $tree[--$current];
             if (\is_array($token)) {
