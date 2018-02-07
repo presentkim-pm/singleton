@@ -23,7 +23,7 @@
  */
 
 
-namespace presentkim\singleton\makeoptimizedplugin{
+namespace presentkim\singleton\makeoptimizedplugin {
 
     use pocketmine\{
       command\Command, command\CommandSender, command\PluginCommand, plugin\Plugin, plugin\PluginBase, Server, utils\TextFormat
@@ -112,7 +112,7 @@ namespace presentkim\singleton\makeoptimizedplugin{
             $pharPath = "{$this->getDataFolder()}{$description->getName()}_v{$description->getVersion()}.phar";
 
             if ($minify) {
-                $metadata = [];
+                $metadata = null;
             } else {
                 $metadata = [
                   'name'         => $description->getName(),
@@ -173,7 +173,7 @@ namespace presentkim\singleton\makeoptimizedplugin{
             return true;
         }
 
-        private function buildPhar(CommandSender $sender, string $pharPath, string $basePath, array $includedPaths, array $metadata, string $stub, int $signatureAlgo = \Phar::SHA1) : void{
+        private function buildPhar(CommandSender $sender, string $pharPath, string $basePath, array $includedPaths, ?array $metadata, string $stub, int $signatureAlgo = \Phar::SHA1) : void{
             $dirname = dirname($pharPath);
             if (!file_exists($dirname)) {
                 mkdir($dirname, 0777, true);
@@ -189,7 +189,9 @@ namespace presentkim\singleton\makeoptimizedplugin{
             $start = microtime(true);
 
             $phar = new \Phar($pharPath);
-            $phar->setMetadata($metadata);
+            if ($metadata !== null) {
+                $phar->setMetadata($metadata);
+            }
             $phar->setStub($stub);
             $phar->setSignatureAlgorithm($signatureAlgo);
             $phar->startBuffering();
@@ -222,7 +224,6 @@ namespace presentkim\singleton\makeoptimizedplugin{
 
             $sender->sendMessage('[DevTools] Done in ' . round(microtime(true) - $start, 3) . 's');
         }
-
     }
 
     function preg_quote_array(array $strings, string $delim = null) : array{
