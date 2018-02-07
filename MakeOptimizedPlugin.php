@@ -76,7 +76,7 @@ namespace presentkim\singleton {
                             $skipped++;
                             continue;
                         }
-                        if ($this->makePluginCommand($sender, $command, $label, $minify, [$plugin->getName()])) {
+                        if ($this->makePluginCommand($sender, $minify, [$plugin->getName()])) {
                             $succeeded[] = $plugin->getName();
                         } else {
                             $failed[] = $plugin->getName();
@@ -89,14 +89,14 @@ namespace presentkim\singleton {
                         $sender->sendMessage(TextFormat::GREEN . count($succeeded) . '/' . (count($plugins) - $skipped) . " plugin" . ((count($plugins) - $skipped) === 1 ? "" : "s") . " successfully built: " . implode(", ", $succeeded));
                     }
                 } else {
-                    $this->makePluginCommand($sender, $command, $label, $minify, $args);
+                    $this->makePluginCommand($sender, $minify, $args);
                 }
                 return true;
             }
             return false;
         }
 
-        private function makePluginCommand(CommandSender $sender, Command $command, string $label, bool $minify, array $args) : bool{
+        private function makePluginCommand(CommandSender $sender, bool $minify, array $args) : bool{
             $pluginName = trim(implode(' ', $args));
             if ($pluginName === "" or !(($plugin = Server::getInstance()->getPluginManager()->getPlugin($pluginName)) instanceof Plugin)) {
                 $sender->sendMessage(TextFormat::RED . 'Invalid plugin name, check the name case.');
