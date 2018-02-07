@@ -29,7 +29,7 @@ namespace presentkim\singleton {
 
     class InstantFurnace extends PluginBase implements Listener{
 
-        public function onEnable(){
+        public function onEnable() : void{
             $this->getServer()->getPluginManager()->registerEvents($this, $this);
         }
 
@@ -38,7 +38,7 @@ namespace presentkim\singleton {
          *
          * @param FurnaceBurnEvent $event
          */
-        public function onFurnaceBurnEvent(FurnaceBurnEvent $event){
+        public function onFurnaceBurnEvent(FurnaceBurnEvent $event) : void{
             if (!$event->isCancelled()) {
                 if (($burnTime = $event->getBurnTime()) > 200) {
                     $furnace = $event->getFurnace();
@@ -53,7 +53,7 @@ namespace presentkim\singleton {
          *
          * @param FurnaceSmeltEvent $event
          */
-        public function onFurnaceSmeltEvent(FurnaceSmeltEvent $event){
+        public function onFurnaceSmeltEvent(FurnaceSmeltEvent $event) : void{
             if (!$event->isCancelled()) {
                 $furnace = $event->getFurnace();
                 if (($burnTime = $furnace->namedtag->getShort(Furnace::TAG_BURN_TIME)) > 199) {

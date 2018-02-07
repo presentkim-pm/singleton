@@ -27,7 +27,7 @@ namespace presentkim\singleton {
 
     class IgnoreCommandCase extends PluginBase implements Listener{
 
-        public function onEnable(){
+        public function onEnable() : void{
             $this->getServer()->getPluginManager()->registerEvents($this, $this);
         }
 
@@ -36,7 +36,7 @@ namespace presentkim\singleton {
          *
          * @param PlayerCommandPreprocessEvent $event
          */
-        public function onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent $event){
+        public function onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent $event) : void{
             if (strpos($message = $event->getMessage(), "/") === 0) {
                 $event->setMessage("/{$this->getCommand($this->getCommand(substr($message, 1)))}");
             }
@@ -47,7 +47,7 @@ namespace presentkim\singleton {
          *
          * @param ServerCommandEvent $event
          */
-        public function onServerCommandEvent(ServerCommandEvent $event){
+        public function onServerCommandEvent(ServerCommandEvent $event) : void{
             $event->setCommand($this->getCommand($event->getCommand()));
         }
 
@@ -56,7 +56,7 @@ namespace presentkim\singleton {
          *
          * @param RemoteServerCommandEvent $event
          */
-        public function onRemoteServerCommandEvent(RemoteServerCommandEvent $event){
+        public function onRemoteServerCommandEvent(RemoteServerCommandEvent $event) : void{
             $event->setCommand($this->getCommand($event->getCommand()));
         }
 
@@ -66,7 +66,7 @@ namespace presentkim\singleton {
          *
          * @return string
          */
-        public function getCommand(string $command){
+        public function getCommand(string $command) : string{
             $explode = explode(" ", $command);
             $commands = $this->getServer()->getCommandMap()->getCommands();
             if (isset($commands[$explode[0]])) {

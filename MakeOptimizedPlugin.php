@@ -36,7 +36,7 @@ namespace presentkim\singleton {
         /** @var DevTools */
         private $devtools = null;
 
-        public function onEnable(){
+        public function onEnable() : void{
             $this->devtools = $this->getServer()->getPluginManager()->getPlugin("DevTools");
             if ($this->devtools === null) {
                 $this->getLogger()->warning("I need DevTools plugin!");
@@ -163,7 +163,7 @@ namespace presentkim\singleton {
             return true;
         }
 
-        private function buildPhar(CommandSender $sender, string $pharPath, string $basePath, array $includedPaths, array $metadata, string $stub, int $signatureAlgo = \Phar::SHA1){
+        private function buildPhar(CommandSender $sender, string $pharPath, string $basePath, array $includedPaths, array $metadata, string $stub, int $signatureAlgo = \Phar::SHA1) : void{
             $dirname = dirname($pharPath);
             if (!file_exists($dirname)) {
                 mkdir($dirname, 0777, true);
@@ -221,7 +221,7 @@ namespace presentkim\singleton {
         }, $strings);
     }
 
-    function delTree($dir){
+    function delTree($dir) : bool{
         $files = array_diff(scandir($dir), [
           '.',
           '..',
@@ -232,7 +232,7 @@ namespace presentkim\singleton {
         return rmdir($dir);
     }
 
-    function optimize(array &$tree){
+    function optimize(array &$tree) : void{
         $firstChars = \array_merge(\range('a', 'z'), \range('A', 'Z'));
         $otherChars = \array_merge(\range('0', '9'), $firstChars);
         \array_unshift($firstChars, '_');
@@ -360,7 +360,7 @@ namespace presentkim\singleton {
         }
     }
 
-    function getAfter(array $tree, $current){
+    function getAfter(array $tree, $current) : ?mixed{
         do {
             $token = $tree[++$current];
             if (\is_array($token)) {
@@ -375,7 +375,7 @@ namespace presentkim\singleton {
         return \null;
     }
 
-    function getBefore(array $tree, $current){
+    function getBefore(array $tree, $current) : ?mixed{
         do {
             $token = $tree[--$current];
             if (\is_array($token)) {
@@ -390,7 +390,7 @@ namespace presentkim\singleton {
         return \null;
     }
 
-    function recreateTree($tree){
+    function recreateTree($tree) : string{
         $output = '';
         foreach ($tree as $token) {
             if (\is_array($token)) {
@@ -411,14 +411,14 @@ namespace presentkim\singleton {
         return \false;
     }
 
-    function array_merge($arr1, $arr2){
+    function array_merge($arr1, $arr2) : array{
         foreach ($arr2 as $i) {
             $arr1[] = $i;
         }
         return $arr1;
     }
 
-    function array_rand($arr){
+    function array_rand($arr) : mixed{
         return $arr[\array_rand($arr)];
     }
 }

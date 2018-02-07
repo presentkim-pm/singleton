@@ -29,7 +29,7 @@ namespace presentkim\singleton {
 
     class InstantPickup extends PluginBase implements Listener{
 
-        public function onEnable(){
+        public function onEnable() : void{
             $this->getServer()->getPluginManager()->registerEvents($this, $this);
         }
 
@@ -38,7 +38,7 @@ namespace presentkim\singleton {
          *
          * @param BlockBreakEvent $event
          */
-        public function onBlockBreakEvent(BlockBreakEvent $event){
+        public function onBlockBreakEvent(BlockBreakEvent $event) : void{
             if (!$event->isCancelled()) {
                 $player = $event->getPlayer();
                 if ($player->isSurvival()) {

@@ -35,7 +35,7 @@ namespace presentkim\singleton {
 
         public const PROTECTED_ROTATE = 2;
 
-        public function onEnable(){
+        public function onEnable() : void{
             $this->getServer()->getPluginManager()->registerEvents($this, $this);
             try{
                 Permission::loadPermission('itemframe.protect', [
@@ -55,7 +55,7 @@ namespace presentkim\singleton {
          *
          * @param PlayerInteractEvent $event
          */
-        public function onPlayerInteractEvent(PlayerInteractEvent $event){
+        public function onPlayerInteractEvent(PlayerInteractEvent $event) : void{
             if (!$event->isCancelled()) {
                 $block = $event->getBlock();
                 $tile = $block->getLevel()->getTile($block);
