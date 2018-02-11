@@ -212,13 +212,9 @@ namespace presentkim\singleton\makeoptimizedplugin {
             $count = count($phar->buildFromDirectory($basePath, $regex));
             $sender->sendMessage("[DevTools] Added {$count} files");
 
-            $sender->sendMessage('[DevTools] Checking for compressible files...');
-            foreach ($phar as $file => $finfo) {
-                /** @var \PharFileInfo $finfo */
-                if ($finfo->getSize() > (1024 * 512)) {
-                    $sender->sendMessage("[DevTools] Compressing {$finfo->getFilename()}");
-                    $finfo->compress(\Phar::GZ);
-                }
+            if (\Phar::canCompress(\Phar::GZ)) {
+                $phar->compressFiles(\Phar::GZ);
+                $sender->sendMessage('[DevTools] Compressing files... (GZ)');
             }
             $phar->stopBuffering();
 
