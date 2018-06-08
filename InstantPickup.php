@@ -20,50 +20,48 @@
 
 namespace kim\present\singleton {
 
-    use pocketmine\event\{
-      Listener, block\BlockBreakEvent
-    };
-    use pocketmine\{
-      inventory\InventoryHolder, plugin\PluginBase
-    };
+	use pocketmine\event\block\BlockBreakEvent;
+	use pocketmine\event\Listener;
+	use pocketmine\inventory\InventoryHolder;
+	use pocketmine\plugin\PluginBase;
 
-    class InstantPickup extends PluginBase implements Listener{
+	class InstantPickup extends PluginBase implements Listener{
 
-        public function onEnable() : void{
-            $this->getServer()->getPluginManager()->registerEvents($this, $this);
-        }
+		public function onEnable() : void{
+			$this->getServer()->getPluginManager()->registerEvents($this, $this);
+		}
 
-        /**
-         * @priority HIGHEST
-         *
-         * @param BlockBreakEvent $event
-         */
-        public function onBlockBreakEvent(BlockBreakEvent $event) : void{
-            if (!$event->isCancelled()) {
-                $player = $event->getPlayer();
-                if ($player->isSurvival()) {
-                    $inventory = $player->getInventory();
-                    $drops = [];
-                    foreach ($event->getDrops() as $i => $drop) {
-                        foreach ($inventory->addItem($drop) as $i) {
-                            $drops[] = $i;
-                        }
-                    }
-                    $event->setDrops($drops);
+		/**
+		 * @priority HIGHEST
+		 *
+		 * @param BlockBreakEvent $event
+		 */
+		public function onBlockBreakEvent(BlockBreakEvent $event) : void{
+			if(!$event->isCancelled()){
+				$player = $event->getPlayer();
+				if($player->isSurvival()){
+					$inventory = $player->getInventory();
+					$drops = [];
+					foreach($event->getDrops() as $i => $drop){
+						foreach($inventory->addItem($drop) as $i){
+							$drops[] = $i;
+						}
+					}
+					$event->setDrops($drops);
 
-                    $tile = $player->level->getTile($event->getBlock());
-                    if ($tile instanceof InventoryHolder) {
-                        $tileInventory = $tile->getInventory();
-                        $items = [];
-                        foreach ($tileInventory->getContents() as $i => $item) {
-                            foreach ($inventory->addItem($item) as $i) {
-                                $items[] = $i;
-                            }
-                        }
-                        $tileInventory->setContents($items);
-                    }
-                }
-            }
-        }
-    }
+					$tile = $player->level->getTile($event->getBlock());
+					if($tile instanceof InventoryHolder){
+						$tileInventory = $tile->getInventory();
+						$items = [];
+						foreach($tileInventory->getContents() as $i => $item){
+							foreach($inventory->addItem($item) as $i){
+								$items[] = $i;
+							}
+						}
+						$tileInventory->setContents($items);
+					}
+				}
+			}
+		}
+	}
 }

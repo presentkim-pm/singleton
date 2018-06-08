@@ -21,65 +21,67 @@
 
 namespace kim\present\singleton {
 
-    use pocketmine\{
-      event\Listener, event\player\PlayerCommandPreprocessEvent, event\server\RemoteServerCommandEvent, event\server\ServerCommandEvent, plugin\PluginBase
-    };
+	use pocketmine\event\Listener;
+	use pocketmine\event\player\PlayerCommandPreprocessEvent;
+	use pocketmine\event\server\{
+		RemoteServerCommandEvent, ServerCommandEvent
+	};
+	use pocketmine\plugin\PluginBase;
 
-    class IgnoreCommandCase extends PluginBase implements Listener{
+	class IgnoreCommandCase extends PluginBase implements Listener{
 
-        public function onEnable() : void{
-            $this->getServer()->getPluginManager()->registerEvents($this, $this);
-        }
+		public function onEnable() : void{
+			$this->getServer()->getPluginManager()->registerEvents($this, $this);
+		}
 
-        /**
-         * @priority LOWEST
-         *
-         * @param PlayerCommandPreprocessEvent $event
-         */
-        public function onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent $event) : void{
-            if (strpos($message = $event->getMessage(), "/") === 0) {
-                $event->setMessage("/{$this->getCommand($this->getCommand(substr($message, 1)))}");
-            }
-        }
+		/**
+		 * @priority LOWEST
+		 *
+		 * @param PlayerCommandPreprocessEvent $event
+		 */
+		public function onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent $event) : void{
+			if(strpos($message = $event->getMessage(), "/") === 0){
+				$event->setMessage("/{$this->getCommand($this->getCommand(substr($message, 1)))}");
+			}
+		}
 
-        /**
-         * @priority LOWEST
-         *
-         * @param ServerCommandEvent $event
-         */
-        public function onServerCommandEvent(ServerCommandEvent $event) : void{
-            $event->setCommand($this->getCommand($event->getCommand()));
-        }
+		/**
+		 * @param string $command
+		 *
+		 * @return string
+		 */
+		public function getCommand(string $command) : string{
+			$explode = explode(" ", $command);
+			$commands = $this->getServer()->getCommandMap()->getCommands();
+			if(isset($commands[$explode[0]])){
+				return $command;
+			}else{
+				foreach($this->getServer()->getCommandMap()->getCommands() as $key => $value){
+					if(strcasecmp($explode[0], $key) === 0){
+						$explode[0] = $key;
+						break;
+					}
+				}
+			}
+			return implode(" ", $explode);
+		}
 
-        /**
-         * @priority LOWEST
-         *
-         * @param RemoteServerCommandEvent $event
-         */
-        public function onRemoteServerCommandEvent(RemoteServerCommandEvent $event) : void{
-            $event->setCommand($this->getCommand($event->getCommand()));
-        }
+		/**
+		 * @priority LOWEST
+		 *
+		 * @param ServerCommandEvent $event
+		 */
+		public function onServerCommandEvent(ServerCommandEvent $event) : void{
+			$event->setCommand($this->getCommand($event->getCommand()));
+		}
 
-
-        /**
-         * @param string $command
-         *
-         * @return string
-         */
-        public function getCommand(string $command) : string{
-            $explode = explode(" ", $command);
-            $commands = $this->getServer()->getCommandMap()->getCommands();
-            if (isset($commands[$explode[0]])) {
-                return $command;
-            } else {
-                foreach ($this->getServer()->getCommandMap()->getCommands() as $key => $value) {
-                    if (strcasecmp($explode[0], $key) === 0) {
-                        $explode[0] = $key;
-                        break;
-                    }
-                }
-            }
-            return implode(" ", $explode);
-        }
-    }
+		/**
+		 * @priority LOWEST
+		 *
+		 * @param RemoteServerCommandEvent $event
+		 */
+		public function onRemoteServerCommandEvent(RemoteServerCommandEvent $event) : void{
+			$event->setCommand($this->getCommand($event->getCommand()));
+		}
+	}
 }

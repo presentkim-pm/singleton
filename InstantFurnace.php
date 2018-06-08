@@ -20,50 +20,50 @@
 
 namespace kim\present\singleton {
 
-    use pocketmine\event\{
-      inventory\FurnaceBurnEvent, Listener, inventory\FurnaceSmeltEvent
-    };
-    use pocketmine\{
-      item\Item, nbt\tag\ByteTag, plugin\PluginBase, tile\Furnace, tile\ItemFrame, utils\TextFormat
-    };
+	use pocketmine\event\inventory\{
+		FurnaceBurnEvent, FurnaceSmeltEvent
+	};
+	use pocketmine\event\Listener;
+	use pocketmine\plugin\PluginBase;
+	use pocketmine\tile\Furnace;
 
-    class InstantFurnace extends PluginBase implements Listener{
+	class InstantFurnace extends PluginBase implements Listener{
 
-        public function onEnable() : void{
-            $this->getServer()->getPluginManager()->registerEvents($this, $this);
-        }
+		public function onEnable() : void{
+			$this->getServer()->getPluginManager()->registerEvents($this, $this);
+		}
 
-        /**
-         * @priority HIGHEST
-         *
-         * @param FurnaceBurnEvent $event
-         */
-        public function onFurnaceBurnEvent(FurnaceBurnEvent $event) : void{
-            if (!$event->isCancelled()) {
-                if (($burnTime = $event->getBurnTime()) > 200) {
-                    $furnace = $event->getFurnace();
-                    $event->setBurnTime($burnTime - 199);
-                    $furnace->namedtag->setShort(Furnace::TAG_COOK_TIME, 399);
-                }
-            }
-        }
+		/**
+		 * @priority HIGHEST
+		 *
+		 * @param FurnaceBurnEvent $event
+		 */
+		public function onFurnaceBurnEvent(FurnaceBurnEvent $event) : void{
+			if(!$event->isCancelled()){
+				if(($burnTime = $event->getBurnTime()) > 200){
+					$furnace = $event->getFurnace();
+					$event->setBurnTime($burnTime - 199);
+					$furnace->namedtag->setShort(Furnace::TAG_COOK_TIME, 399);
+				}
+			}
+		}
 
-        /**
-         * @priority HIGHEST
-         *
-         * @param FurnaceSmeltEvent $event
-         */
-        public function onFurnaceSmeltEvent(FurnaceSmeltEvent $event) : void{
-            if (!$event->isCancelled()) {
-                $furnace = $event->getFurnace();
-                if (($burnTime = $furnace->namedtag->getShort(Furnace::TAG_BURN_TIME)) > 199) {
-                    $furnace->namedtag->setShort(Furnace::TAG_BURN_TIME, $burnTime - 199);
-                    $furnace->namedtag->setShort(Furnace::TAG_COOK_TIME, 399);
-                } elseif ($furnace->getInventory()->getFuel()->getFuelTime() > 200) {
-                    $furnace->namedtag->setShort(Furnace::TAG_BURN_TIME, 1);
-                    $furnace->namedtag->setShort(Furnace::TAG_COOK_TIME, $furnace->namedtag->getShort(Furnace::TAG_COOK_TIME) + $burnTime);
-                }
-            }
-        }
-    }
+		/**
+		 * @priority HIGHEST
+		 *
+		 * @param FurnaceSmeltEvent $event
+		 */
+		public function onFurnaceSmeltEvent(FurnaceSmeltEvent $event) : void{
+			if(!$event->isCancelled()){
+				$furnace = $event->getFurnace();
+				if(($burnTime = $furnace->namedtag->getShort(Furnace::TAG_BURN_TIME)) > 199){
+					$furnace->namedtag->setShort(Furnace::TAG_BURN_TIME, $burnTime - 199);
+					$furnace->namedtag->setShort(Furnace::TAG_COOK_TIME, 399);
+				}elseif($furnace->getInventory()->getFuel()->getFuelTime() > 200){
+					$furnace->namedtag->setShort(Furnace::TAG_BURN_TIME, 1);
+					$furnace->namedtag->setShort(Furnace::TAG_COOK_TIME, $furnace->namedtag->getShort(Furnace::TAG_COOK_TIME) + $burnTime);
+				}
+			}
+		}
+	}
 }

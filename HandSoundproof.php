@@ -20,29 +20,29 @@
 
 namespace kim\present\singleton {
 
-    use pocketmine\event\Listener;
-    use pocketmine\event\server\DataPacketReceiveEvent;
-    use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
-    use pocketmine\plugin\PluginBase;
+	use pocketmine\event\Listener;
+	use pocketmine\event\server\DataPacketReceiveEvent;
+	use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
+	use pocketmine\plugin\PluginBase;
 
-    class HandSoundproof extends PluginBase implements Listener{
+	class HandSoundproof extends PluginBase implements Listener{
 
-        public function onEnable() : void{
-            $this->getServer()->getPluginManager()->registerEvents($this, $this);
-        }
+		public function onEnable() : void{
+			$this->getServer()->getPluginManager()->registerEvents($this, $this);
+		}
 
-        /**
-         * @priority HIGHEST
-         *
-         * @param DataPacketReceiveEvent $event
-         */
-        public function onDataPacketReceiveEvent(DataPacketReceiveEvent $event) : void{
-            $pk = $event->getPacket();
-            if ($pk instanceof LevelSoundEventPacket) {
-                if ($pk->sound === LevelSoundEventPacket::SOUND_ATTACK_NODAMAGE || $pk->sound === LevelSoundEventPacket::SOUND_ATTACK_STRONG) {
-                    $event->setCancelled(true);
-                }
-            }
-        }
-    }
+		/**
+		 * @priority HIGHEST
+		 *
+		 * @param DataPacketReceiveEvent $event
+		 */
+		public function onDataPacketReceiveEvent(DataPacketReceiveEvent $event) : void{
+			$pk = $event->getPacket();
+			if($pk instanceof LevelSoundEventPacket){
+				if($pk->sound === LevelSoundEventPacket::SOUND_ATTACK_NODAMAGE || $pk->sound === LevelSoundEventPacket::SOUND_ATTACK_STRONG){
+					$event->setCancelled(true);
+				}
+			}
+		}
+	}
 }
