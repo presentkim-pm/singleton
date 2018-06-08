@@ -4,6 +4,8 @@
  * DevTools plugin for PocketMine-MP
  * Copyright (C) 2014 PocketMine <https://github.com/PocketMine/DevTools>
  *
+ * @DEPRECATED  : Make to phar plugin (Accoding to https://github.com/PresentKim/MakePluginPlus-PMMP)
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
