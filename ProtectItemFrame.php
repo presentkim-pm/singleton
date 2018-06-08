@@ -4,6 +4,8 @@
  * ProtectItemFrame plugin for PocketMine-MP
  * Copyright (C) 2018 PresentKim <https://github.com/PMMPPlugin>
  *
+ * @DEPRECATED  : Tile->namedtag was removed (Accoding to https://github.com/pmmp/PocketMine-MP/commit/fa21cd96c570a19dd4db3204779e24a163652f28)
+ *
  * The AGPL license differs from the other GNU licenses in that it was built for network software.
  * You can distribute modified versions if you keep track of the changes and the date you made them.
  * As per usual with GNU licenses, you must license derivatives under AGPL.
