@@ -11,14 +11,14 @@
  * Since web sites and services are never distributed in the traditional sense, the AGPL is the GPL of the web.
  *
  * @name        ProtectItemFrame
- * @main        presentkim\singleton\ProtectItemFrame
- * @version     1.0.3
+ * @main        kim\present\singleton\ProtectItemFrame
+ * @version     1.1.0
  * @api         3.0.0-ALPHA11
  * @description Protect item frame by stick
  * @author      PresentKim
  */
 
-namespace presentkim\singleton {
+namespace kim\present\singleton {
 
     use pocketmine\event\{
       Listener, player\PlayerInteractEvent

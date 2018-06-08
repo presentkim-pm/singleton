@@ -11,14 +11,14 @@
  * Since web sites and services are never distributed in the traditional sense, the AGPL is the GPL of the web.
  *
  * @name        HandSoundproof
- * @main        presentkim\singleton\HandSoundproof
+ * @main        kim\present\singleton\HandSoundproof
  * @version     1.0.0
  * @api         3.0.0-ALPHA11
  * @description Mute the hand sounds
  * @author      PresentKim
  */
 
-namespace presentkim\singleton {
+namespace kim\present\singleton {
 
     use pocketmine\event\Listener;
     use pocketmine\event\server\DataPacketReceiveEvent;

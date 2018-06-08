@@ -11,14 +11,14 @@
  * Since web sites and services are never distributed in the traditional sense, the AGPL is the GPL of the web.
  *
  * @name        InstantFurnace
- * @main        presentkim\singleton\InstantFurnace
+ * @main        kim\present\singleton\InstantFurnace
  * @version     1.0.0
  * @api         3.0.0-ALPHA11
  * @description Instant furnace
  * @author      PresentKim
  */
 
-namespace presentkim\singleton {
+namespace kim\present\singleton {
 
     use pocketmine\event\{
       inventory\FurnaceBurnEvent, Listener, inventory\FurnaceSmeltEvent

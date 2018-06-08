@@ -2,18 +2,18 @@
 
 /**
  * @name        StealHumanoidSkin
- * @main        presentkim\singleton\humanoid\StealHumanoidSkin
+ * @main        kim\present\singleton\humanoid\StealHumanoidSkin
  * @version     1.0.0
  * @api         3.0.0-ALPHA11
  * @author      PresentKim
  */
 
-namespace presentkim\singleton\humanoid {
+namespace kim\present\singleton\humanoid {
 
     use pocketmine\entity\Skin;
     use pocketmine\event\Listener;
     use pocketmine\plugin\PluginBase;
-    use presentkim\humanoid\event\PlayerClickHumanoidEvent;
+    use kim\present\humanoid\event\PlayerClickHumanoidEvent;
 
     class StealHumanoidSkin extends PluginBase implements Listener{
 

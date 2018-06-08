@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * @name MakeOptimizedPlugin
- * @main        presentkim\singleton\makeoptimizedplugin\MakeOptimizedPlugin
+ * @main        kim\present\singleton\makeoptimizedplugin\MakeOptimizedPlugin
  * @version     1.0.1
  * @api         3.0.0-ALPHA11
  * @description Make optimized plugin with devtools
@@ -23,7 +23,7 @@
  */
 
 
-namespace presentkim\singleton\makeoptimizedplugin {
+namespace kim\present\singleton\makeoptimizedplugin {
 
     use pocketmine\{
       command\Command, command\CommandSender, command\PluginCommand, plugin\Plugin, plugin\PluginBase, Server, utils\TextFormat

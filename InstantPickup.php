@@ -11,14 +11,14 @@
  * Since web sites and services are never distributed in the traditional sense, the AGPL is the GPL of the web.
  *
  * @name        InstantPickup
- * @main        presentkim\singleton\InstantPickup
+ * @main        kim\present\singleton\InstantPickup
  * @version     1.0.0
  * @api         3.0.0-ALPHA11
  * @description Instant pickup
  * @author      PresentKim
  */
 
-namespace presentkim\singleton {
+namespace kim\present\singleton {
 
     use pocketmine\event\{
       Listener, block\BlockBreakEvent
