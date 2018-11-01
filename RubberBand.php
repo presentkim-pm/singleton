@@ -34,6 +34,20 @@ namespace kim\present\singleton {
 	use pocketmine\Server;
 
 	class RubberBand extends PluginBase implements Listener{
+		/** @var \ReflectionProperty */
+		private $reflectionProperty;
+
+		/**
+		 * Called when the plugin is loaded, before calling onEnable()
+		 *
+		 * @throws \ReflectionException
+		 */
+		public function onLoad() : void{
+			$reflectionClass = new \ReflectionClass(Server::class);
+			$this->reflectionProperty = $reflectionClass->getProperty("maxPlayers");
+			$this->reflectionProperty->setAccessible(true);
+		}
+
 		/**
 		 * Called when the plugin is enabled
 		 */
@@ -67,15 +81,8 @@ namespace kim\present\singleton {
 		 * @param int $addition
 		 */
 		public function recalculateMaxPlayers(int $addition) : void{
-			try{
-				$reflectionClass = new \ReflectionClass(Server::class);
-				$reflectionProperty = $reflectionClass->getProperty("maxPlayers");
-				$reflectionProperty->setAccessible(true);
-			}catch(\ReflectionException $e){
-				return;
-			}
-			$server =  $this->getServer();
-			$reflectionProperty->setValue($server, count($server->getOnlinePlayers()) + $addition);
+			$server = $this->getServer();
+			$this->reflectionProperty->setValue($server, count($server->getOnlinePlayers()) + $addition);
 		}
 	}
 }
