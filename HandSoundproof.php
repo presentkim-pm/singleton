@@ -26,6 +26,8 @@
  *  c(")(")
  */
 
+declare(strict_types=1);
+
 namespace kim\present\singleton {
 
 	use pocketmine\event\Listener;

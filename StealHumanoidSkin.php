@@ -26,6 +26,8 @@
  *  c(")(")
  */
 
+declare(strict_types=1);
+
 namespace kim\present\singleton\humanoid {
 
 	use kim\present\humanoid\event\PlayerClickHumanoidEvent;
