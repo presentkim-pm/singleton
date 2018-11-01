@@ -18,10 +18,8 @@
  * @name        InstantFurnace
  * @main        kim\present\singleton\InstantFurnace
  * @version     1.0.0
- * @api         3.0.0-ALPHA11
+ * @api         4.0.0
  * @description Instant furnace
- *
- * @DEPRECATED  : Tile->namedtag was removed (Accoding to https://github.com/pmmp/PocketMine-MP/commit/fa21cd96c570a19dd4db3204779e24a163652f28)
  *
  *   (\ /)
  *  ( . .) ♥
@@ -30,13 +28,32 @@
 
 namespace kim\present\singleton {
 
-	use pocketmine\event\inventory\{FurnaceBurnEvent, FurnaceSmeltEvent};
+	use pocketmine\event\inventory\FurnaceBurnEvent;
+	use pocketmine\event\inventory\FurnaceSmeltEvent;
 	use pocketmine\event\Listener;
 	use pocketmine\plugin\PluginBase;
 	use pocketmine\tile\Furnace;
 
 	class InstantFurnace extends PluginBase implements Listener{
+		/** @var \ReflectionProperty */
+		private $burnTimeProperty, $cookTimeProperty;
 
+		/**
+		 * Called when the plugin is loaded, before calling onEnable()
+		 *
+		 * @throws \ReflectionException
+		 */
+		public function onLoad() : void{
+			$reflectionClass = new \ReflectionClass(Furnace::class);
+			$this->cookTimeProperty = $reflectionClass->getProperty("cookTime");
+			$this->cookTimeProperty->setAccessible(true);
+			$this->burnTimeProperty = $reflectionClass->getProperty("burnTime");
+			$this->burnTimeProperty->setAccessible(true);
+		}
+
+		/**
+		 * Called when the plugin is enabled
+		 */
 		public function onEnable() : void{
 			$this->getServer()->getPluginManager()->registerEvents($this, $this);
 		}
@@ -51,7 +68,7 @@ namespace kim\present\singleton {
 				if(($burnTime = $event->getBurnTime()) > 200){
 					$furnace = $event->getFurnace();
 					$event->setBurnTime($burnTime - 199);
-					$furnace->namedtag->setShort(Furnace::TAG_COOK_TIME, 399);
+					$this->cookTimeProperty->setValue($furnace, 399);
 				}
 			}
 		}
@@ -64,12 +81,12 @@ namespace kim\present\singleton {
 		public function onFurnaceSmeltEvent(FurnaceSmeltEvent $event) : void{
 			if(!$event->isCancelled()){
 				$furnace = $event->getFurnace();
-				if(($burnTime = $furnace->namedtag->getShort(Furnace::TAG_BURN_TIME)) > 199){
-					$furnace->namedtag->setShort(Furnace::TAG_BURN_TIME, $burnTime - 199);
-					$furnace->namedtag->setShort(Furnace::TAG_COOK_TIME, 399);
+				if(($burnTime = $this->burnTimeProperty->getValue($furnace)) > 199){
+					$this->burnTimeProperty->setValue($furnace, $burnTime - 199);
+					$this->cookTimeProperty->setValue($furnace, 399);
 				}elseif($furnace->getInventory()->getFuel()->getFuelTime() > 200){
-					$furnace->namedtag->setShort(Furnace::TAG_BURN_TIME, 1);
-					$furnace->namedtag->setShort(Furnace::TAG_COOK_TIME, $furnace->namedtag->getShort(Furnace::TAG_COOK_TIME) + $burnTime);
+					$this->burnTimeProperty->setValue($furnace, 1);
+					$this->cookTimeProperty->setValue($furnace, $this->cookTimeProperty->getValue($furnace) + $burnTime);
 				}
 			}
 		}
