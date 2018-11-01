@@ -18,7 +18,7 @@
  * @name        InstantPickup
  * @main        kim\present\singleton\InstantPickup
  * @version     1.0.0
- * @api         3.0.0-ALPHA11
+ * @api         4.0.0
  * @description Instant pickup
  *
  *   (\ /)
