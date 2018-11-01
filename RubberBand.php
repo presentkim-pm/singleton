@@ -52,7 +52,7 @@ namespace kim\present\singleton {
 		 * Called when the plugin is enabled
 		 */
 		public function onEnable() : void{
-			self::recalculateMaxPlayers(1);
+			$this->recalculateMaxPlayers(1);
 
 			$this->getServer()->getPluginManager()->registerEvents($this, $this);
 		}
@@ -63,7 +63,7 @@ namespace kim\present\singleton {
 		 * @param PlayerJoinEvent $event
 		 */
 		public function onPlayerJoinEvent(PlayerJoinEvent $event) : void{
-			self::recalculateMaxPlayers(1);
+			$this->recalculateMaxPlayers(1);
 		}
 
 		/**
@@ -72,7 +72,7 @@ namespace kim\present\singleton {
 		 * @param PlayerQuitEvent $event
 		 */
 		public function onPlayerQuitEvent(PlayerQuitEvent $event) : void{
-			self::recalculateMaxPlayers(0);
+			$this->recalculateMaxPlayers(0);
 		}
 
 		/**
