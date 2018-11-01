@@ -65,7 +65,8 @@ namespace kim\present\singleton {
 		 */
 		public function onFurnaceBurnEvent(FurnaceBurnEvent $event) : void{
 			if(!$event->isCancelled()){
-				if(($burnTime = $event->getBurnTime()) > 200){
+				$burnTime = $event->getBurnTime();
+				if($burnTime > 200){
 					$furnace = $event->getFurnace();
 					$event->setBurnTime($burnTime - 199);
 					$this->cookTimeProperty->setValue($furnace, 399);
@@ -81,7 +82,8 @@ namespace kim\present\singleton {
 		public function onFurnaceSmeltEvent(FurnaceSmeltEvent $event) : void{
 			if(!$event->isCancelled()){
 				$furnace = $event->getFurnace();
-				if(($burnTime = $this->burnTimeProperty->getValue($furnace)) > 199){
+				$burnTime = $this->burnTimeProperty->getValue($furnace);
+				if($burnTime > 199){
 					$this->burnTimeProperty->setValue($furnace, $burnTime - 199);
 					$this->cookTimeProperty->setValue($furnace, 399);
 				}elseif($furnace->getInventory()->getFuel()->getFuelTime() > 200){
