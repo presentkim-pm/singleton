@@ -29,12 +29,8 @@ namespace kim\present\singleton\makeoptimizedplugin {
 
 	use DevTools\DevTools;
 	use FolderPluginLoader\FolderPluginLoader;
-	use pocketmine\command\{
-		Command, CommandSender, PluginCommand
-	};
-	use pocketmine\plugin\{
-		Plugin, PluginBase
-	};
+	use pocketmine\command\{Command, CommandSender, PluginCommand};
+	use pocketmine\plugin\{Plugin, PluginBase};
 	use pocketmine\Server;
 	use pocketmine\utils\TextFormat;
 

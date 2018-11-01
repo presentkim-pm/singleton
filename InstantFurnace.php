@@ -22,9 +22,7 @@
 
 namespace kim\present\singleton {
 
-	use pocketmine\event\inventory\{
-		FurnaceBurnEvent, FurnaceSmeltEvent
-	};
+	use pocketmine\event\inventory\{FurnaceBurnEvent, FurnaceSmeltEvent};
 	use pocketmine\event\Listener;
 	use pocketmine\plugin\PluginBase;
 	use pocketmine\tile\Furnace;

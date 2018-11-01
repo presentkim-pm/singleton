@@ -23,9 +23,7 @@ namespace kim\present\singleton {
 
 	use pocketmine\event\Listener;
 	use pocketmine\event\player\PlayerCommandPreprocessEvent;
-	use pocketmine\event\server\{
-		RemoteServerCommandEvent, ServerCommandEvent
-	};
+	use pocketmine\event\server\{RemoteServerCommandEvent, ServerCommandEvent};
 	use pocketmine\plugin\PluginBase;
 
 	class IgnoreCommandCase extends PluginBase implements Listener{
