@@ -49,24 +49,12 @@ namespace kim\present\singleton {
 				$player = $event->getPlayer();
 				if($player->isSurvival()){
 					$inventory = $player->getInventory();
-					$drops = [];
-					foreach($event->getDrops() as $i => $drop){
-						foreach($inventory->addItem($drop) as $i){
-							$drops[] = $i;
-						}
-					}
-					$event->setDrops($drops);
+					$event->setDrops($inventory->addItem(...$event->getDrops()));
 
 					$tile = $player->level->getTile($event->getBlock());
 					if($tile instanceof InventoryHolder){
 						$tileInventory = $tile->getInventory();
-						$items = [];
-						foreach($tileInventory->getContents() as $i => $item){
-							foreach($inventory->addItem($item) as $i){
-								$items[] = $i;
-							}
-						}
-						$tileInventory->setContents($items);
+						$tileInventory->setContents($inventory->addItem(...$tileInventory->getContents()));
 					}
 				}
 			}
