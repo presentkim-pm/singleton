@@ -1,23 +1,31 @@
 <?php
 
 /**
- * ProtectItemFrame plugin for PocketMine-MP
- * Copyright (C) 2018 PresentKim <https://github.com/PMMPPlugin>
+ *  ____                           _   _  ___
+ * |  _ \ _ __ ___  ___  ___ _ __ | |_| |/ (_)_ __ ___
+ * | |_) | '__/ _ \/ __|/ _ \ '_ \| __| ' /| | '_ ` _ \
+ * |  __/| | |  __/\__ \  __/ | | | |_| . \| | | | | | |
+ * |_|   |_|  \___||___/\___|_| |_|\__|_|\_\_|_| |_| |_|
  *
- * @DEPRECATED  : Tile->namedtag was removed (Accoding to https://github.com/pmmp/PocketMine-MP/commit/fa21cd96c570a19dd4db3204779e24a163652f28)
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the MIT License. see <https://opensource.org/licenses/MIT>.
  *
- * The AGPL license differs from the other GNU licenses in that it was built for network software.
- * You can distribute modified versions if you keep track of the changes and the date you made them.
- * As per usual with GNU licenses, you must license derivatives under AGPL.
- * It provides the same restrictions and freedoms as the GPLv3 but with an additional clause which makes it so that source code must be distributed along with web publication.
- * Since web sites and services are never distributed in the traditional sense, the AGPL is the GPL of the web.
+ *
+ * @author      PresentKim (debe3721@gmail.com)
+ * @link        https://github.com/PresentKim
+ * @license     https://opensource.org/licenses/MIT MIT License
  *
  * @name        ProtectItemFrame
  * @main        kim\present\singleton\ProtectItemFrame
  * @version     1.1.0
  * @api         3.0.0-ALPHA11
  * @description Protect item frame by stick
- * @author      PresentKim
+ *
+ * @DEPRECATED  : Tile->namedtag was removed (Accoding to https://github.com/pmmp/PocketMine-MP/commit/fa21cd96c570a19dd4db3204779e24a163652f28)
+ *
+ *   (\ /)
+ *  ( . .) ♥
+ *  c(")(")
  */
 
 namespace kim\present\singleton {
