@@ -18,7 +18,7 @@
  * @name        HandSoundproof
  * @main        kim\present\singleton\HandSoundproof
  * @version     1.0.0
- * @api         3.0.0-ALPHA11
+ * @api         4.0.0
  * @description Mute the hand sounds
  *
  *   (\ /)
@@ -34,7 +34,9 @@ namespace kim\present\singleton {
 	use pocketmine\plugin\PluginBase;
 
 	class HandSoundproof extends PluginBase implements Listener{
-
+		/**
+		 * Called when the plugin is enabled
+		 */
 		public function onEnable() : void{
 			$this->getServer()->getPluginManager()->registerEvents($this, $this);
 		}
